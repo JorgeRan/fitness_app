@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>983797582372-voqi0c1q24ta7pb88tbiehp8mafve67i.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.983797582372-voqi0c1q24ta7pb88tbiehp8mafve67i</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>983797582372-sdsef09ke67v8leu246s5qgtm3jvet7a.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBt8VEzNGqRmjCB26EDthr4ARQ4hrZ5OEQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>983797582372</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.jorgeran.fitnessApp</string>
+	<key>PROJECT_ID</key>
+	<string>fitness-app-d3545</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fitness-app-d3545.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:983797582372:ios:d899c987890067666326b1</string>
+	<key>DATABASE_URL</key>
+	<string>https://fitness-app-d3545-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
