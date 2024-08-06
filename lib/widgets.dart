@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitness_app/routine_list.dart';
 import 'package:fitness_app/screens/description_exercise.dart';
 import 'package:fitness_app/screens/home_screen.dart';
 import 'package:fitness_app/screens/routine_exercises_screen.dart';
@@ -51,6 +50,7 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                         context: context,
                         builder: (context) => SelectRoutine(
                               exerciseName: widget.exerciseName,
+                              description: widget.exerciseDescription,
                             ));
                   },
                   child: Align(
@@ -105,8 +105,10 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                               .collection('/users/${user!.uid}/routines/')
                               .doc(widget.routineName)
                               .update({
+                            'descriptions': FieldValue.arrayRemove(
+                                [widget.exerciseDescription]),
                             'exercises':
-                                FieldValue.arrayRemove([widget.exerciseName])
+                                FieldValue.arrayRemove([widget.exerciseName]),
                           });
                         });
                       },
@@ -226,10 +228,7 @@ class _RoutineButtonState extends State<RoutineButton> {
             .doc(widget.routineName)
             .delete();
 
-        Provider.of<RoutineData>(context, listen: false)
-            .removeRoutine(widget.routineName);
-
-        Provider.of<RoutineData>(context, listen: false).addFirebaseRoutines();
+        Provider.of<RoutineData>(context).removeRoutine(widget.routineName);
       },
       onTap: () {
         Navigator.push(
@@ -252,14 +251,12 @@ class _RoutineButtonState extends State<RoutineButton> {
                   style: kTitleTextStyle.copyWith(
                       fontWeight: FontWeight.normal, fontSize: 27),
                 ),
-                FutureBuilder(
-                    future: Provider.of<RoutineData>(context, listen: false)
+                StreamBuilder(
+                    stream: Provider.of<RoutineData>(context, listen: false)
                         .countFirebaseExercises(widget.routineName),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return const Text('Error');
                       } else {
                         final exerciseCount = snapshot.data;
                         return RichText(
@@ -365,12 +362,14 @@ class MuscleCheckboxListTile extends StatefulWidget {
     required this.title,
     required this.finalExercisesList,
     required this.isChecked,
+    required this.finalDescriptionsList,
     super.key,
   });
 
   final String title;
   final List finalExercisesList;
   late bool isChecked;
+  final List finalDescriptionsList;
 
   @override
   State<MuscleCheckboxListTile> createState() => _MuscleCheckboxListTileState();
@@ -381,11 +380,12 @@ User? user = FirebaseAuth.instance.currentUser;
 class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
   bool? _checked = false;
   List addedExercises = [];
+  List addedDescriptions = [];
 
   void getMuscleExercices(String title, bool? checked, List finalExercisesList,
-      List addedExercises) async {
+      List finalDescriptionList, List addedExercises) async {
     List exercisesList = [];
-
+    List descriptionList = [];
     Set<int> setOfInts = {};
 
     if (checked!) {
@@ -397,22 +397,30 @@ class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
         var data = exercise.data() as Map<String, dynamic>;
 
         exercisesList.add(data['name']);
+        descriptionList.add(data['description']);
       }
 
       while (setOfInts.length < 4) {
         int randomIntValue = Random().nextInt(exercisesList.length);
         setOfInts.add(randomIntValue);
+
         for (var i in setOfInts) {
           finalExercisesList.add(exercisesList[i]);
           addedExercises.add(exercisesList[i]);
+          finalDescriptionList.add(descriptionList[i]);
+          addedDescriptions.add(descriptionList[i]);
         }
       }
     } else {
       for (var exercises in addedExercises) {
         finalExercisesList.remove(exercises);
       }
+      for (var description in addedDescriptions) {
+        finalDescriptionList.remove(description);
+      }
     }
   }
+
 //hello
   @override
   Widget build(BuildContext context) {
@@ -430,6 +438,7 @@ class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
             widget.title,
             _checked,
             widget.finalExercisesList,
+            widget.finalDescriptionsList,
             addedExercises,
           );
         });

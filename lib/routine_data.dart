@@ -14,52 +14,48 @@ class RoutineData extends ChangeNotifier {
   }
 
   void removeRoutine(String routineName) {
-    routineButtonList.removeWhere((routine) => true);
+    routineButtonList.remove(RoutineButton(routineName: routineName));
     notifyListeners();
   }
-
 
   Future<void> addFirebaseRoutines() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        print('fetching data');
-        final snapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .collection('routines')
-            .get();
 
-        final routineList = snapshot.docs;
+      print('fetching data');
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .collection('routines')
+          .get();
 
-        for (var routine in routineList) {
-          final String routineName = routine.data()['routineName'];
+      final routineList = snapshot.docs;
 
-          final routineButton = RoutineButton(routineName: routineName);
-          routineButtonList.add(routineButton);
-        }
-        notifyListeners();
+      for (var routine in routineList) {
+        final String routineName = routine.data()['routineName'];
+
+        final routineButton = RoutineButton(routineName: routineName);
+        routineButtonList.add(routineButton);
       }
+      notifyListeners();
     } catch (e) {
       print('Error fetching routines: $e');
     }
   }
 
-  Future<int> countFirebaseExercises(String? routineName) async {
+  Stream<int> countFirebaseExercises(String? routineName) {
     final user = FirebaseAuth.instance.currentUser;
 
-    final snapshot = await FirebaseFirestore.instance
+    return FirebaseFirestore.instance
         .collection('users')
         .doc(user!.uid)
         .collection('routines')
         .doc(routineName)
-        .get();
+        .snapshots()
+        .map((snapshot) {
+      final exerciseList = snapshot.data()?['exercises'] ?? [];
 
-    final exerciseList = snapshot.data()?['exercises'];
-
-    exerciseCount = exerciseList.length;
-
-    notifyListeners();
-    return exerciseCount;
+      return exerciseList.length;
+    });
   }
 }

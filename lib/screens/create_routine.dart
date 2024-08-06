@@ -19,6 +19,7 @@ class _CreateRoutineState extends State<CreateRoutine> {
   late String routineName;
   late bool showMuscleGroup = false;
   late List finalExercisesList = [];
+  late List finalDescriptionsList = [];
   late List addedExercises = [];
   bool isChecked = false;
 
@@ -89,34 +90,42 @@ class _CreateRoutineState extends State<CreateRoutine> {
                       MuscleCheckboxListTile(
                           title: 'Upper Body',
                           finalExercisesList: finalExercisesList,
+                          finalDescriptionsList: finalDescriptionsList,
                           isChecked: isChecked),
                       MuscleCheckboxListTile(
                           title: 'Shoulders',
                           finalExercisesList: finalExercisesList,
+                          finalDescriptionsList: finalDescriptionsList,
                           isChecked: isChecked),
                       MuscleCheckboxListTile(
                           title: 'Arms',
                           finalExercisesList: finalExercisesList,
+                          finalDescriptionsList: finalDescriptionsList,
                           isChecked: isChecked),
                       MuscleCheckboxListTile(
                           title: 'ForeArms',
                           finalExercisesList: finalExercisesList,
+                          finalDescriptionsList: finalDescriptionsList,
                           isChecked: isChecked),
                       MuscleCheckboxListTile(
                           title: 'Abs',
                           finalExercisesList: finalExercisesList,
+                          finalDescriptionsList: finalDescriptionsList,
                           isChecked: isChecked),
                       MuscleCheckboxListTile(
                           title: 'Adductors',
                           finalExercisesList: finalExercisesList,
+                          finalDescriptionsList: finalDescriptionsList,
                           isChecked: isChecked),
                       MuscleCheckboxListTile(
                           title: 'Legs',
                           finalExercisesList: finalExercisesList,
+                          finalDescriptionsList: finalDescriptionsList,
                           isChecked: isChecked),
                       MuscleCheckboxListTile(
                           title: 'Calves',
                           finalExercisesList: finalExercisesList,
+                          finalDescriptionsList: finalDescriptionsList,
                           isChecked: isChecked),
                     ],
                   ),
@@ -136,6 +145,7 @@ class _CreateRoutineState extends State<CreateRoutine> {
 
                     routineData.addRoutine(routineName);
                     print(finalExercisesList);
+                    print(finalDescriptionsList);
 
                     User? user = FirebaseAuth.instance.currentUser;
                     if (showMuscleGroup) {
@@ -147,7 +157,10 @@ class _CreateRoutineState extends State<CreateRoutine> {
                             .doc(routineName)
                             .set({
                           'routineName': routineName,
-                          'exercises': FieldValue.arrayUnion(finalExercisesList)
+                          'exercises':
+                              FieldValue.arrayUnion(finalExercisesList),
+                          'descriptions':
+                              FieldValue.arrayUnion(finalDescriptionsList),
                         });
                       } catch (e) {
                         print(e);
@@ -163,6 +176,7 @@ class _CreateRoutineState extends State<CreateRoutine> {
                           .set({
                         'routineName': routineName,
                         'exercises': [],
+                        'descriptions': [],
                       });
 
                       Navigator.pop(context);

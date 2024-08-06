@@ -1,12 +1,15 @@
+import 'dart:ffi';
+
 import 'package:fitness_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SelectRoutine extends StatefulWidget {
-  const SelectRoutine({required this.exerciseName, super.key});
+  const SelectRoutine({required this.exerciseName, required this.description, super.key});
 
   final String exerciseName;
+  final String description;
 
   @override
   State<SelectRoutine> createState() => _SelectRoutineState();
@@ -106,7 +109,8 @@ class _SelectRoutineState extends State<SelectRoutine> {
                       .doc(selectedRoutine)
                       .set({
                     'routineName': selectedRoutine,
-                    'exercises': FieldValue.arrayUnion([widget.exerciseName])
+                    'exercises': FieldValue.arrayUnion([widget.exerciseName]),
+                    'descriptions': FieldValue.arrayUnion([widget.description])
                   }, SetOptions(merge: true));
 
                   Navigator.pop(context);

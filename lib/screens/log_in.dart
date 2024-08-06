@@ -25,12 +25,19 @@ class _LogInState extends State<LogIn> {
   final User? _user = FirebaseAuth.instance.currentUser;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   bool isLoading = false;
+  bool googleLoading = false;
   late String? googleEmail;
   bool isPressed = false;
 
-  showSpinner(bool value) {
+  showSpinnerEmailPassword(bool value) {
     setState(() {
       isLoading = value;
+    });
+  }
+
+  showSpinnerGoogle(bool value) {
+    setState(() {
+      googleLoading = value;
     });
   }
 
@@ -40,45 +47,43 @@ class _LogInState extends State<LogIn> {
 
   Future<void> signInWithGoogle() async {
     try {
+      showSpinnerGoogle(true);
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
 
-        // Sign in with Firebase
-        UserCredential userCredential =
-            await auth.signInWithCredential(credential);
-        User? user = userCredential.user;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-        final userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user!.uid)
-            .get();
+      UserCredential userCredential =
+          await auth.signInWithCredential(credential);
+      User? user = userCredential.user;
 
-        if (!userDoc.exists) {
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid)
-              .set({
-            'email': user.email,
-          });
-        }
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .get();
 
-        setState(() {
-          googleEmail = user.email;
+      if (!userDoc.exists) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'email': user.email,
         });
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-        );
-
-        print('User signed in: $googleEmail');
       }
+
+      setState(() {
+        googleEmail = user.email;
+      });
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+
+      print('User signed in: $googleEmail');
+
+      showSpinnerGoogle(false);
     } catch (e) {
       print('Error signing in with Google: $e');
     }
@@ -218,7 +223,7 @@ class _LogInState extends State<LogIn> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          showSpinner(true);
+                          showSpinnerEmailPassword(true);
                           if (_user == null) {
                             try {
                               await auth.createUserWithEmailAndPassword(
@@ -263,7 +268,7 @@ class _LogInState extends State<LogIn> {
                               print(e);
                             }
                           }
-                          showSpinner(false);
+                          showSpinnerEmailPassword(false);
                         },
                         child: isLoading
                             ? const SpinKitRing(color: kWhite)
@@ -294,55 +299,46 @@ class _LogInState extends State<LogIn> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GoogleAppleButton(
-                              appLogin: 'google',
-                              color: kWhite,
-                              scale: 0.6,
-                              signInFunction: () => signInWithGoogle(),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            if (Platform.isIOS)
-                              GoogleAppleButton(
-                                appLogin: 'apple',
-                                color: Colors.black,
-                                scale: 0.8,
-                                signInFunction: () => signInWithApple(context),
-                              ),
-                          ],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          googleLoading
+                              ? const SpinKitRing(color: kWhite)
+                              : GoogleAppleButton(
+                                  appLogin: 'google',
+                                  color: kWhite,
+                                  scale: 0.6,
+                                  signInFunction: () => signInWithGoogle(),
+                                ),
+                        ],
                       ),
                       const Spacer(),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          text: 'By continuing, you agree to ',
-                          style: kButtonsTextStyle,
-                          children: [
-                            TextSpan(
-                              text: 'Fitness App Terms & Conditions ',
-                              style: kButtonsTextStyle.copyWith(color: kPurple),
-                            ),
-                            TextSpan(
-                              text: 'and ',
-                              style: kButtonsTextStyle,
-                            ),
-                            TextSpan(
-                              text: 'Privacy Policy.',
-                              style: kButtonsTextStyle.copyWith(color: kPurple),
-                            )
-                          ],
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 40),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            text: 'By continuing, you agree to ',
+                            style: kButtonsTextStyle,
+                            children: [
+                              TextSpan(
+                                text: 'Fitness App Terms & Conditions ',
+                                style:
+                                    kButtonsTextStyle.copyWith(color: kPurple),
+                              ),
+                              TextSpan(
+                                text: 'and ',
+                                style: kButtonsTextStyle,
+                              ),
+                              TextSpan(
+                                text: 'Privacy Policy.',
+                                style:
+                                    kButtonsTextStyle.copyWith(color: kPurple),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 40,
-                      )
                     ],
                   ),
                 )),

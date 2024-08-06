@@ -49,19 +49,17 @@ class _RoutineExercisesScreenState extends State<RoutineExercisesScreen> {
 }
 
 class StreamBuilderExercises extends StatelessWidget {
-  StreamBuilderExercises(
-      {super.key,
-      required FirebaseFirestore firestore,
-      required this.routineName,
-      })
-      : _firestore = firestore;
+  StreamBuilderExercises({
+    super.key,
+    required FirebaseFirestore firestore,
+    required this.routineName,
+  }) : _firestore = firestore;
 
   final FirebaseFirestore _firestore;
 
   final String routineName;
 
   final User? user = FirebaseAuth.instance.currentUser;
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,12 +78,14 @@ class StreamBuilderExercises extends StatelessWidget {
             );
           }
           final exerciseList = snapshot.data!.data()!['exercises'];
-         
+          final descriptionList = snapshot.data!.data()!['descriptions'];
+          print(exerciseList);
+          print(descriptionList);
 
-          for (var exercise in exerciseList) {
-            final exerciseName = exercise;
-            const exerciseDescription = '';
-           
+          for (int i = 0; i < exerciseList.length; i++) {
+            final exerciseName = exerciseList[i];
+            final exerciseDescription = descriptionList[i];
+
             final exerciseCard = ExerciseButton(
               routineName: routineName,
               exerciseName: exerciseName,

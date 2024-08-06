@@ -31,7 +31,7 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                 showModalBottomSheet(
                   context: context,
                   builder: (context) => SelectRoutine(
-                    exerciseName: widget.exerciseName,
+                    exerciseName: widget.exerciseName,description: widget.exerciseDescription,
                   ),
                 );
               },
@@ -88,10 +88,10 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                           Padding(
                             padding: const EdgeInsets.only(
                                 top: 10.0, left: 10, right: 10, bottom: 10),
-                            child: Text(
+                            child: Text( textAlign: TextAlign.justify,
                               widget.exerciseDescription,
                               style: kButtonsTextStyle.copyWith(
-                                  fontWeight: FontWeight.w500, fontSize: 17),
+                                  fontWeight: FontWeight.w500, fontSize: 18),
                             ),
                           ),
                         ],
