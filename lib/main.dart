@@ -1,3 +1,4 @@
+import 'package:fitness_app/auth_gate.dart';
 import 'package:fitness_app/screens/log_in.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.robotoTextTheme(),
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0XFF36C2CE)),
         ),
-        home: const LogIn(),
+        home: const AuthGate(),
       ),
     );
   }

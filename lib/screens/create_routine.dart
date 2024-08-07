@@ -2,10 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitness_app/constants.dart';
 import 'package:fitness_app/routine_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 import 'package:fitness_app/widgets.dart';
-import 'home_screen.dart';
 import 'package:provider/provider.dart';
 
 class CreateRoutine extends StatefulWidget {
@@ -138,14 +136,10 @@ class _CreateRoutineState extends State<CreateRoutine> {
                     backgroundColor: Colors.white,
                   ),
                   onPressed: () {
-                    HomeScreen(routineName: routineName);
-
                     final routineData =
                         Provider.of<RoutineData>(context, listen: false);
 
                     routineData.addRoutine(routineName);
-                    print(finalExercisesList);
-                    print(finalDescriptionsList);
 
                     User? user = FirebaseAuth.instance.currentUser;
                     if (showMuscleGroup) {

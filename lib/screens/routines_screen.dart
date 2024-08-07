@@ -3,12 +3,11 @@ import 'package:fitness_app/screens/create_routine.dart';
 import 'package:fitness_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness_app/routine_list.dart';
-import 'package:fitness_app/routine_data.dart';
 
 class RoutinesScreen extends StatefulWidget {
-  const RoutinesScreen({required this.routineName, super.key});
+  const RoutinesScreen({ super.key});
 
-  final String? routineName;
+  
 
   @override
   State<RoutinesScreen> createState() => _RoutinesScreenState();
@@ -16,14 +15,7 @@ class RoutinesScreen extends StatefulWidget {
 
 class _RoutinesScreenState extends State<RoutinesScreen> {
   @override
-  void initState() {
-    RoutineData().countFirebaseExercises(widget.routineName);
-    RoutineData().addFirebaseRoutines();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -52,11 +44,13 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                   color: Color(0xFF4535C1),
                 ),
                 width: double.infinity,
-                child: Stack(
+                child: Column(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 82.0),
-                      child: RoutineList(),
+                    const Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 82.0),
+                        child: RoutineList(),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(22.0),

@@ -72,9 +72,9 @@ class _LogInState extends State<LogIn> {
         });
       }
 
-      setState(() {
+      
         googleEmail = user.email;
-      });
+      
 
       Navigator.push(
         context,

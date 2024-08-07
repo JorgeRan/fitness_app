@@ -11,11 +11,22 @@ class RoutineList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return const Center(
+        child: Text('User is not logged in'),
+      );
+    }
+
     return StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('/users/${user!.uid}/routines/')
+            .collection('/users/${user.uid}/routines/')
             .snapshots(),
         builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return const Center(
+              child: Text('No Routines'),
+            );
+          }
           final routineList = snapshot.data!.docs;
 
           Provider.of<RoutineData>(context, listen: false)

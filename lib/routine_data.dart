@@ -25,7 +25,7 @@ class RoutineData extends ChangeNotifier {
       print('fetching data');
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(user!.uid)
+          .doc(user?.uid)
           .collection('routines')
           .get();
 

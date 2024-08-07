@@ -11,9 +11,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 String selectedSide = "Front";
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({this.routineName, super.key});
+  const HomeScreen({super.key});
 
-  final String? routineName;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -56,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           GestureDetector(
                             onTap: () {
                               FirebaseAuth.instance.signOut();
+                              
                               Navigator.pop(context);
                             },
                             child: const CircleAvatar(
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => RoutinesScreen(
-                                      routineName: widget.routineName,
+                                      
                                     )));
                       },
                       child: Row(
