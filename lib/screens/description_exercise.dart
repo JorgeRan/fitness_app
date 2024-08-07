@@ -81,21 +81,19 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                         topRight: Radius.circular(20),
                       ),
                     ),
-                    child: Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, left: 10, right: 10, bottom: 10),
-                            child: Text( textAlign: TextAlign.justify,
-                              widget.exerciseDescription,
-                              style: kButtonsTextStyle.copyWith(
-                                  fontWeight: FontWeight.w500, fontSize: 18),
-                            ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 10.0, left: 10, right: 10, bottom: 10),
+                          child: Text( textAlign: TextAlign.justify,
+                            widget.exerciseDescription,
+                            style: kButtonsTextStyle.copyWith(
+                                fontWeight: FontWeight.w500, fontSize: 18),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 )
