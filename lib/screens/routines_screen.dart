@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fitness_app/routine_list.dart';
 
 class RoutinesScreen extends StatefulWidget {
-  const RoutinesScreen({ super.key});
-
-  
+  const RoutinesScreen({super.key});
 
   @override
   State<RoutinesScreen> createState() => _RoutinesScreenState();
@@ -15,7 +13,7 @@ class RoutinesScreen extends StatefulWidget {
 
 class _RoutinesScreenState extends State<RoutinesScreen> {
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -91,15 +89,16 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                               Text(
                                 'New Routine',
                                 style: kButtonsTextStyle.copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    color: const Color(0XFF36C2CE),
-                                    shadows: [
-                                      const Shadow(
-                                        color: Color.fromARGB(55, 0, 0, 0),
-                                        offset: Offset(0, 3),
-                                      )
-                                    ]),
-                              )
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color(0XFF36C2CE),
+                                  shadows: [
+                                    const Shadow(
+                                      color: Color.fromARGB(55, 0, 0, 0),
+                                      offset: Offset(0, 3),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),

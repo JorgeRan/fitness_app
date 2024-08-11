@@ -4,6 +4,8 @@ import 'package:fitness_app/screens/description_exercise.dart';
 import 'package:fitness_app/screens/home_screen.dart';
 import 'package:fitness_app/screens/routine_exercises_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'constants.dart';
 import 'package:fitness_app/screens/select_routine_screen.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,7 @@ class ExerciseButton extends StatefulWidget {
     required this.exerciseDescription,
     required this.showAddButton,
     this.routineName,
+     this.selectedPart,
     super.key,
   });
 
@@ -23,6 +26,7 @@ class ExerciseButton extends StatefulWidget {
   final String exerciseDescription;
   final bool showAddButton;
   final String? routineName;
+  final String? selectedPart;
 
   @override
   State<ExerciseButton> createState() => _ExerciseButtonState();
@@ -55,28 +59,28 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                   },
                   child: Align(
                     alignment: Alignment.bottomRight,
-                    child: SizedBox(
-                      width: (MediaQuery.of(context).size.width - 110) / 2,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 4),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Add to routine',
-                              style: kButtonsTextStyle.copyWith(
-                                  color: const Color(0xFF4535C1),
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Icon(
-                              Icons.add_circle_rounded,
-                              color: Color(0xFF4535C1),
-                              size: 24.22,
-                            ),
-                          ],
-                        ),
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height - 675,
+                          right: MediaQuery.of(context).size.width - 410),
+                      width: (MediaQuery.of(context).size.width - 130) / 2,
+                      child: Row(
+                        children: [
+                          Text(
+                            'Add to routine',
+                            style: kButtonsTextStyle.copyWith(
+                                color: const Color(0xFF4535C1),
+                                fontWeight: FontWeight.w400),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          const Icon(
+                            Icons.add_circle_rounded,
+                            color: Color(0xFF4535C1),
+                            size: 24.22,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -89,10 +93,36 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                     width: (MediaQuery.of(context).size.width - 66) / 2,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        'images/dumbell.png',
-                        fit: BoxFit.cover,
-                      ),
+                      child: FutureBuilder(
+                    future: FirebaseStorage.instance
+                        .ref(
+                            '/exercises/${widget.selectedPart}/${widget.exerciseName}/images')
+                        .child('${widget.exerciseName}_image.jpg')
+                        .getDownloadURL(),
+                    builder: (context, snapshot) {
+                      print(widget.selectedPart);
+                      print(widget.exerciseName);
+                      print(snapshot);
+                      try {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator(); // Show a loading indicator while waiting
+                        } else if (snapshot.hasError) {
+                          return Text(
+                              'Error: ${snapshot.error}'); // Handle errors
+                        } else if (snapshot.hasData) {
+                          return Image.network(
+                              snapshot.data as String); // Display the image
+                        } else {
+                          return Text(
+                              'No data available'); // Handle the case where there's no data
+                        }
+                      } on Exception catch (e) {
+                        print(e);
+                        return Text('$e');
+                      }
+                    },
+                  ),
                     ),
                   ),
                   Padding(
@@ -121,6 +151,7 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                                       exerciseDescription:
                                           widget.exerciseDescription,
                                       showAddButton: widget.showAddButton,
+                                      selectedPart: widget.selectedPart,
                                     )));
                       },
                       child: SizedBox(
@@ -186,19 +217,15 @@ class PopButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 16,
-      left: 10,
-      child: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(
-            Icons.chevron_left,
-            size: 40,
-            color: Colors.white,
-          )),
-    );
+    return GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: const Icon(
+          Icons.chevron_left,
+          size: 40,
+          color: Colors.white,
+        ));
   }
 }
 

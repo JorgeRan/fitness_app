@@ -11,7 +11,6 @@ class ExercisesListScreen extends StatefulWidget {
   late BodyParts muscleSelected;
   late String? selectedPart;
 
-
   @override
   State<ExercisesListScreen> createState() => _ExercisesListScreenState();
 }
@@ -25,27 +24,30 @@ class _ExercisesListScreenState extends State<ExercisesListScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            const PopButton(),
+            const Positioned(
+              top: 16,
+              left: 10,
+              child: PopButton(),
+            ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 33),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0, bottom: 15),
-                  child: Text(
-                    '${widget.selectedPart} Exercises:',
-                    style: kTitleTextStyle.copyWith(fontSize: 25),
-                  ),
-                ),
-                StreamBuilderExercises(
-                  firestore: _firestore,
-                  widget: widget,
-                  selectedBodyParts: widget.muscleSelected,
-                  collection: widget.selectedPart,
-                  
-                ),
-              ]),
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0, bottom: 15),
+                      child: Text(
+                        '${widget.selectedPart} Exercises:',
+                        style: kTitleTextStyle.copyWith(fontSize: 25),
+                      ),
+                    ),
+                    StreamBuilderExercises(
+                      firestore: _firestore,
+                      widget: widget,
+                      selectedBodyParts: widget.muscleSelected,
+                      collection: widget.selectedPart,
+                    ),
+                  ]),
             )
           ],
         ),
@@ -61,14 +63,12 @@ class StreamBuilderExercises extends StatelessWidget {
     required this.widget,
     required this.collection,
     required this.selectedBodyParts,
-    
   }) : _firestore = firestore;
 
   final FirebaseFirestore _firestore;
   final ExercisesListScreen widget;
   final String? collection;
   final BodyParts selectedBodyParts;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,7 @@ class StreamBuilderExercises extends StatelessWidget {
                 exerciseName: exerciseName,
                 exerciseDescription: exerciseDescription,
                 showAddButton: true,
-               
+                selectedPart: collection,
               );
               exercisesButtonList.add(exerciseCard);
             }

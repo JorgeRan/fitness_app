@@ -1,3 +1,4 @@
+import 'package:fitness_app/screens/log_in.dart';
 import 'package:fitness_app/screens/routines_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:body_part_selector/body_part_selector.dart';
@@ -12,7 +13,6 @@ String selectedSide = "Front";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -55,8 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           GestureDetector(
                             onTap: () {
                               FirebaseAuth.instance.signOut();
-                              
-                              Navigator.pop(context);
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const LogIn()));
                             },
                             child: const CircleAvatar(
                               backgroundColor: Colors.white,
@@ -102,9 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => RoutinesScreen(
-                                      
-                                    )));
+                                builder: (_) => const RoutinesScreen()));
                       },
                       child: Row(
                         children: [

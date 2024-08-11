@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/routine_data.dart';
 import 'package:fitness_app/screens/home_screen.dart';
@@ -72,9 +71,7 @@ class _LogInState extends State<LogIn> {
         });
       }
 
-      
-        googleEmail = user.email;
-      
+      googleEmail = user.email;
 
       Navigator.push(
         context,

@@ -22,7 +22,11 @@ class _RoutineExercisesScreenState extends State<RoutineExercisesScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            const PopButton(),
+            const Positioned(
+              top: 16,
+              left: 10,
+              child: PopButton(),
+            ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 33),
               child: Column(
@@ -79,8 +83,6 @@ class StreamBuilderExercises extends StatelessWidget {
           }
           final exerciseList = snapshot.data!.data()!['exercises'];
           final descriptionList = snapshot.data!.data()!['descriptions'];
-          print(exerciseList);
-          print(descriptionList);
 
           for (int i = 0; i < exerciseList.length; i++) {
             final exerciseName = exerciseList[i];
