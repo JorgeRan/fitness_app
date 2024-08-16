@@ -26,11 +26,7 @@ class DescriptionExercise extends StatefulWidget {
 class _DescriptionExerciseState extends State<DescriptionExercise> {
   VideoPlayerController? _videoPlayerController;
 
-  @override
-  void initState() {
-    _videoPlayerController;
-    super.initState();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +83,11 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
+                          return const SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: CircularProgressIndicator(),
+                          );
                         } else if (snapshot.hasData) {
                           _videoPlayerController =
                               VideoPlayerController.networkUrl(
@@ -99,6 +99,9 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                             builder: (context, videoSnapshot) {
                               if (videoSnapshot.connectionState ==
                                   ConnectionState.done) {
+                                _videoPlayerController!.play();
+                                _videoPlayerController!.setLooping(true);
+
                                 return AspectRatio(
                                   aspectRatio:
                                       _videoPlayerController!.value.aspectRatio,
