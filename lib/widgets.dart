@@ -18,7 +18,7 @@ class ExerciseButton extends StatefulWidget {
     required this.exerciseDescription,
     required this.showAddButton,
     this.routineName,
-     this.selectedPart,
+    this.selectedPart,
     super.key,
   });
 
@@ -94,35 +94,35 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: FutureBuilder(
-                    future: FirebaseStorage.instance
-                        .ref(
-                            '/exercises/${widget.selectedPart}/${widget.exerciseName}/images')
-                        .child('${widget.exerciseName}_image.jpg')
-                        .getDownloadURL(),
-                    builder: (context, snapshot) {
-                      print(widget.selectedPart);
-                      print(widget.exerciseName);
-                      print(snapshot);
-                      try {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator(); // Show a loading indicator while waiting
-                        } else if (snapshot.hasError) {
-                          return Text(
-                              'Error: ${snapshot.error}'); // Handle errors
-                        } else if (snapshot.hasData) {
-                          return Image.network(
-                              snapshot.data as String); // Display the image
-                        } else {
-                          return Text(
-                              'No data available'); // Handle the case where there's no data
-                        }
-                      } on Exception catch (e) {
-                        print(e);
-                        return Text('$e');
-                      }
-                    },
-                  ),
+                        future: FirebaseStorage.instance
+                            .ref(
+                                '/exercises/${widget.selectedPart}/${widget.exerciseName}/images')
+                            .child('${widget.exerciseName}_image.jpg')
+                            .getDownloadURL(),
+                        builder: (context, snapshot) {
+                          print(widget.selectedPart);
+                          print(widget.exerciseName);
+                          print(snapshot);
+                          try {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator(); // Show a loading indicator while waiting
+                            } else if (snapshot.hasError) {
+                              return Text(
+                                  'Error: ${snapshot.error}'); // Handle errors
+                            } else if (snapshot.hasData) {
+                              return Image.network(
+                                  snapshot.data as String); // Display the image
+                            } else {
+                              return Text(
+                                  'No data available'); // Handle the case where there's no data
+                            }
+                          } on Exception catch (e) {
+                            print(e);
+                            return Text('$e');
+                          }
+                        },
+                      ),
                     ),
                   ),
                   Padding(

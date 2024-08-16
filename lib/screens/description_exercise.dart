@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/constants.dart';
 import 'package:fitness_app/widgets.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,13 @@ class DescriptionExercise extends StatefulWidget {
 }
 
 class _DescriptionExerciseState extends State<DescriptionExercise> {
-  late VideoPlayerController _controller;
+  VideoPlayerController? _videoPlayerController;
+
+  @override
+  void initState() {
+    _videoPlayerController;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,55 +76,50 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                     style: kTitleTextStyle.copyWith(fontSize: 25),
                   ),
                 ),
-                Flexible(
+                SizedBox(
+                    width: double.infinity,
                     child: FutureBuilder(
-                  future: FirebaseStorage.instance
-                      .ref(
-                          '/exercises/${widget.selectedPart}/${widget.exerciseName}/videos')
-                      .child('${widget.exerciseName}_video.mp4')
-                      .getDownloadURL(),
-                  builder: (context, snapshot) {
-                    print(widget.selectedPart);
-                    print(widget.exerciseName);
-                    print(snapshot.data);
+                      future: FirebaseStorage.instance
+                          .ref(
+                              '/exercises/${widget.selectedPart}/${widget.exerciseName}/videos')
+                          .child('${widget.exerciseName}_video.mp4')
+                          .getDownloadURL(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasData) {
+                          _videoPlayerController =
+                              VideoPlayerController.networkUrl(
+                            Uri.parse(snapshot.data as String),
+                          );
 
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // Show a loading indicator while waiting
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}'); // Handle errors
-                    } else if (snapshot.hasData) {
-                      // Initialize the VideoPlayerController with the download URL
-                      final videoPlayerController =
-                          VideoPlayerController.networkUrl(
-                              Uri.parse(snapshot.data as String));
-
-                      // You must call initialize on the controller and wait for it to complete before displaying the video
-                      return FutureBuilder(
-                        future: videoPlayerController.initialize(),
-                        builder: (context, videoSnapshot) {
-                          if (videoSnapshot.connectionState ==
-                              ConnectionState.done) {
-                            return AspectRatio(
-                              aspectRatio:
-                                  videoPlayerController.value.aspectRatio,
-                              child: VideoPlayer(videoPlayerController),
-                            );
-                          } else {
-                            return CircularProgressIndicator(); // Show loading indicator while video is being prepared
-                          }
-                        },
-                      );
-                    } else {
-                      return Text(
-                          'No data available'); // Handle the case where there's no data
-                    }
-                  },
-                )),
+                          return FutureBuilder(
+                            future: _videoPlayerController!.initialize(),
+                            builder: (context, videoSnapshot) {
+                              if (videoSnapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return AspectRatio(
+                                  aspectRatio:
+                                      _videoPlayerController!.value.aspectRatio,
+                                  child: VideoPlayer(_videoPlayerController!),
+                                );
+                              } else {
+                                return const CircularProgressIndicator();
+                              }
+                            },
+                          );
+                        } else {
+                          return const Text('No data available');
+                        }
+                      },
+                    )),
                 const SizedBox(
                   height: 30,
                 ),
                 Expanded(
                   child: Container(
+                    height: double.infinity,
                     decoration: const BoxDecoration(
                       color: Color(0XFF36C2CE),
                       borderRadius: BorderRadius.only(
@@ -127,20 +127,15 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                         topRight: Radius.circular(20),
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 10.0, left: 10, right: 10, bottom: 10),
-                          child: Text(
-                            textAlign: TextAlign.justify,
-                            widget.exerciseDescription,
-                            style: kButtonsTextStyle.copyWith(
-                                fontWeight: FontWeight.w500, fontSize: 18),
-                          ),
-                        ),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 10.0, left: 10, right: 10, bottom: 10),
+                      child: Text(
+                        textAlign: TextAlign.justify,
+                        widget.exerciseDescription,
+                        style: kButtonsTextStyle.copyWith(
+                            fontWeight: FontWeight.w500, fontSize: 18),
+                      ),
                     ),
                   ),
                 )
@@ -150,5 +145,11 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController?.dispose();
+    super.dispose();
   }
 }
