@@ -83,15 +83,18 @@ class StreamBuilderExercises extends StatelessWidget {
           }
           final exerciseList = snapshot.data!.data()!['exercises'];
           final descriptionList = snapshot.data!.data()!['descriptions'];
+          final selectedPartList = snapshot.data!.data()!['selectedParts'];
 
           for (int i = 0; i < exerciseList.length; i++) {
             final exerciseName = exerciseList[i];
             final exerciseDescription = descriptionList[i];
+            final selectedPart = selectedPartList[i];
 
             final exerciseCard = ExerciseButton(
               routineName: routineName,
               exerciseName: exerciseName,
               exerciseDescription: exerciseDescription,
+              selectedPart: selectedPart,
               showAddButton: false,
             );
             exercisesButtonList.add(exerciseCard);

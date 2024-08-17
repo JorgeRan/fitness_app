@@ -18,6 +18,7 @@ class _CreateRoutineState extends State<CreateRoutine> {
   late bool showMuscleGroup = false;
   late List finalExercisesList = [];
   late List finalDescriptionsList = [];
+  late List finalSelectedPartList = [];
   late List addedExercises = [];
   bool isChecked = false;
 
@@ -86,45 +87,61 @@ class _CreateRoutineState extends State<CreateRoutine> {
                   child: ListView(
                     children: [
                       MuscleCheckboxListTile(
-                          title: 'Upper Body',
-                          finalExercisesList: finalExercisesList,
-                          finalDescriptionsList: finalDescriptionsList,
-                          isChecked: isChecked),
+                        title: 'Upper Body',
+                        finalExercisesList: finalExercisesList,
+                        finalDescriptionsList: finalDescriptionsList,
+                        isChecked: isChecked,
+                        finalSelectedPartList: finalSelectedPartList,
+                      ),
                       MuscleCheckboxListTile(
-                          title: 'Shoulders',
-                          finalExercisesList: finalExercisesList,
-                          finalDescriptionsList: finalDescriptionsList,
-                          isChecked: isChecked),
+                        title: 'Shoulders',
+                        finalExercisesList: finalExercisesList,
+                        finalDescriptionsList: finalDescriptionsList,
+                        isChecked: isChecked,
+                        finalSelectedPartList: finalSelectedPartList,
+                      ),
                       MuscleCheckboxListTile(
-                          title: 'Arms',
-                          finalExercisesList: finalExercisesList,
-                          finalDescriptionsList: finalDescriptionsList,
-                          isChecked: isChecked),
+                        title: 'Arms',
+                        finalExercisesList: finalExercisesList,
+                        finalDescriptionsList: finalDescriptionsList,
+                        isChecked: isChecked,
+                        finalSelectedPartList: finalSelectedPartList,
+                      ),
                       MuscleCheckboxListTile(
-                          title: 'ForeArms',
-                          finalExercisesList: finalExercisesList,
-                          finalDescriptionsList: finalDescriptionsList,
-                          isChecked: isChecked),
+                        title: 'ForeArms',
+                        finalExercisesList: finalExercisesList,
+                        finalDescriptionsList: finalDescriptionsList,
+                        isChecked: isChecked,
+                        finalSelectedPartList: finalSelectedPartList,
+                      ),
                       MuscleCheckboxListTile(
-                          title: 'Abs',
-                          finalExercisesList: finalExercisesList,
-                          finalDescriptionsList: finalDescriptionsList,
-                          isChecked: isChecked),
+                        title: 'Abs',
+                        finalExercisesList: finalExercisesList,
+                        finalDescriptionsList: finalDescriptionsList,
+                        isChecked: isChecked,
+                        finalSelectedPartList: finalSelectedPartList,
+                      ),
                       MuscleCheckboxListTile(
-                          title: 'Adductors',
-                          finalExercisesList: finalExercisesList,
-                          finalDescriptionsList: finalDescriptionsList,
-                          isChecked: isChecked),
+                        title: 'Adductors',
+                        finalExercisesList: finalExercisesList,
+                        finalDescriptionsList: finalDescriptionsList,
+                        isChecked: isChecked,
+                        finalSelectedPartList: finalSelectedPartList,
+                      ),
                       MuscleCheckboxListTile(
-                          title: 'Legs',
-                          finalExercisesList: finalExercisesList,
-                          finalDescriptionsList: finalDescriptionsList,
-                          isChecked: isChecked),
+                        title: 'Legs',
+                        finalExercisesList: finalExercisesList,
+                        finalDescriptionsList: finalDescriptionsList,
+                        isChecked: isChecked,
+                        finalSelectedPartList: finalSelectedPartList,
+                      ),
                       MuscleCheckboxListTile(
-                          title: 'Calves',
-                          finalExercisesList: finalExercisesList,
-                          finalDescriptionsList: finalDescriptionsList,
-                          isChecked: isChecked),
+                        title: 'Calves',
+                        finalExercisesList: finalExercisesList,
+                        finalDescriptionsList: finalDescriptionsList,
+                        isChecked: isChecked,
+                        finalSelectedPartList: finalSelectedPartList,
+                      ),
                     ],
                   ),
                 ),
@@ -155,6 +172,8 @@ class _CreateRoutineState extends State<CreateRoutine> {
                               FieldValue.arrayUnion(finalExercisesList),
                           'descriptions':
                               FieldValue.arrayUnion(finalDescriptionsList),
+                          'selectedParts':
+                              FieldValue.arrayUnion(finalSelectedPartList),
                         });
                       } catch (e) {
                         print(e);

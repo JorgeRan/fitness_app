@@ -55,6 +55,7 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                         builder: (context) => SelectRoutine(
                               exerciseName: widget.exerciseName,
                               description: widget.exerciseDescription,
+                              selectedPart: widget.selectedPart,
                             ));
                   },
                   child: Align(
@@ -102,6 +103,7 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                         builder: (context, snapshot) {
                           print(widget.selectedPart);
                           print(widget.exerciseName);
+
                           print(snapshot);
                           try {
                             if (snapshot.connectionState ==
@@ -139,10 +141,13 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                                 [widget.exerciseDescription]),
                             'exercises':
                                 FieldValue.arrayRemove([widget.exerciseName]),
+                            'selectedParts':
+                                FieldValue.arrayRemove([widget.selectedPart])
                           });
                         });
                       },
                       onTap: () {
+                        print(widget.selectedPart);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -390,6 +395,7 @@ class MuscleCheckboxListTile extends StatefulWidget {
     required this.finalExercisesList,
     required this.isChecked,
     required this.finalDescriptionsList,
+    required this.finalSelectedPartList,
     super.key,
   });
 
@@ -397,6 +403,7 @@ class MuscleCheckboxListTile extends StatefulWidget {
   final List finalExercisesList;
   late bool isChecked;
   final List finalDescriptionsList;
+  final List finalSelectedPartList;
 
   @override
   State<MuscleCheckboxListTile> createState() => _MuscleCheckboxListTileState();
@@ -408,11 +415,18 @@ class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
   bool? _checked = false;
   List addedExercises = [];
   List addedDescriptions = [];
+  List addedSelectedParts = [];
 
-  void getMuscleExercices(String title, bool? checked, List finalExercisesList,
-      List finalDescriptionList, List addedExercises) async {
+  void getMuscleExercices(
+      String title,
+      bool? checked,
+      List finalExercisesList,
+      List finalDescriptionList,
+      List finalSelectedPartList,
+      List addedExercises) async {
     List exercisesList = [];
     List descriptionList = [];
+    List selectedPartList = [];
     Set<int> setOfInts = {};
 
     if (checked!) {
@@ -425,6 +439,7 @@ class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
 
         exercisesList.add(data['name']);
         descriptionList.add(data['description']);
+        selectedPartList.add(data['selectedPart']);
       }
 
       while (setOfInts.length < 4) {
@@ -436,14 +451,20 @@ class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
           addedExercises.add(exercisesList[i]);
           finalDescriptionList.add(descriptionList[i]);
           addedDescriptions.add(descriptionList[i]);
+          finalSelectedPartList.add(selectedPartList[i]);
+          addedSelectedParts.add(selectedPartList[i]);
         }
       }
+      
     } else {
       for (var exercises in addedExercises) {
         finalExercisesList.remove(exercises);
       }
       for (var description in addedDescriptions) {
         finalDescriptionList.remove(description);
+      }
+      for (var selectedPart in addedSelectedParts) {
+        finalSelectedPartList.remove(selectedPart);
       }
     }
   }
@@ -466,6 +487,7 @@ class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
             _checked,
             widget.finalExercisesList,
             widget.finalDescriptionsList,
+            widget.finalSelectedPartList,
             addedExercises,
           );
         });

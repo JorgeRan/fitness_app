@@ -1,6 +1,7 @@
 import 'package:fitness_app/constants.dart';
 import 'package:fitness_app/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'select_routine_screen.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:video_player/video_player.dart';
@@ -26,8 +27,6 @@ class DescriptionExercise extends StatefulWidget {
 class _DescriptionExerciseState extends State<DescriptionExercise> {
   VideoPlayerController? _videoPlayerController;
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +38,7 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                   builder: (context) => SelectRoutine(
                     exerciseName: widget.exerciseName,
                     description: widget.exerciseDescription,
+                    selectedPart: widget.selectedPart,
                   ),
                 );
               },
@@ -83,10 +83,16 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: CircularProgressIndicator(),
+                          return const Row(
+                            children: [
+                              Spacer(),
+                              SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: SpinKitRing(color: kWhite),
+                              ),
+                              Spacer(),
+                            ],
                           );
                         } else if (snapshot.hasData) {
                           _videoPlayerController =
