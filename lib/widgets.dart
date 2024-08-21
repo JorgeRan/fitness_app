@@ -35,6 +35,31 @@ class ExerciseButton extends StatefulWidget {
 class _ExerciseButtonState extends State<ExerciseButton> {
   User? user = FirebaseAuth.instance.currentUser;
 
+  void _removeMuscleGroupToRoutine(
+      String muscleGroup, String exercise, String description) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      var routineRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('routines')
+          .doc(widget.routineName);
+
+      DocumentSnapshot docSnapshot = await routineRef.get();
+
+      List<dynamic> currentSelectedParts = docSnapshot['selectedParts'] ?? [];
+
+      currentSelectedParts.remove(muscleGroup);
+
+      await routineRef.update({
+        'descriptions': FieldValue.arrayRemove([description]),
+        'exercises': FieldValue.arrayRemove([exercise]),
+        'selectedParts': currentSelectedParts,
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -133,17 +158,10 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                     child: GestureDetector(
                       onLongPress: () {
                         setState(() {
-                          FirebaseFirestore.instance
-                              .collection('/users/${user!.uid}/routines/')
-                              .doc(widget.routineName)
-                              .update({
-                            'descriptions': FieldValue.arrayRemove(
-                                [widget.exerciseDescription]),
-                            'exercises':
-                                FieldValue.arrayRemove([widget.exerciseName]),
-                            'selectedParts':
-                                FieldValue.arrayRemove([widget.selectedPart])
-                          });
+                          _removeMuscleGroupToRoutine(
+                              widget.selectedPart as String,
+                              widget.exerciseName,
+                              widget.exerciseDescription);
                         });
                       },
                       onTap: () {
@@ -418,12 +436,15 @@ class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
   List addedSelectedParts = [];
 
   void getMuscleExercices(
-      String title,
-      bool? checked,
-      List finalExercisesList,
-      List finalDescriptionList,
-      List finalSelectedPartList,
-      List addedExercises) async {
+    String title,
+    bool? checked,
+    List finalExercisesList,
+    List finalDescriptionList,
+    List finalSelectedPartList,
+    List addedExercises,
+    List addedDescriptions,
+    List addedSelectedParts,
+  ) async {
     List exercisesList = [];
     List descriptionList = [];
     List selectedPartList = [];
@@ -442,20 +463,19 @@ class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
         selectedPartList.add(data['selectedPart']);
       }
 
-      while (setOfInts.length < 4) {
+      while (setOfInts.length < 4 && setOfInts.length < exercisesList.length) {
         int randomIntValue = Random().nextInt(exercisesList.length);
         setOfInts.add(randomIntValue);
-
-        for (var i in setOfInts) {
-          finalExercisesList.add(exercisesList[i]);
-          addedExercises.add(exercisesList[i]);
-          finalDescriptionList.add(descriptionList[i]);
-          addedDescriptions.add(descriptionList[i]);
-          finalSelectedPartList.add(selectedPartList[i]);
-          addedSelectedParts.add(selectedPartList[i]);
-        }
       }
-      
+
+      for (var i in setOfInts) {
+        finalExercisesList.add(exercisesList[i]);
+        addedExercises.add(exercisesList[i]);
+        finalDescriptionList.add(descriptionList[i]);
+        addedDescriptions.add(descriptionList[i]);
+        finalSelectedPartList.add(selectedPartList[i]);
+        addedSelectedParts.add(selectedPartList[i]);
+      }
     } else {
       for (var exercises in addedExercises) {
         finalExercisesList.remove(exercises);
@@ -480,6 +500,7 @@ class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
         onChanged: (value) {
           setState(() {
             _checked = value;
+            widget.isChecked = true;
           });
 
           getMuscleExercices(
@@ -489,6 +510,8 @@ class _MuscleCheckboxListTileState extends State<MuscleCheckboxListTile> {
             widget.finalDescriptionsList,
             widget.finalSelectedPartList,
             addedExercises,
+            addedDescriptions,
+            addedSelectedParts,
           );
         });
   }

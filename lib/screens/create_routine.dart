@@ -172,8 +172,7 @@ class _CreateRoutineState extends State<CreateRoutine> {
                               FieldValue.arrayUnion(finalExercisesList),
                           'descriptions':
                               FieldValue.arrayUnion(finalDescriptionsList),
-                          'selectedParts':
-                              FieldValue.arrayUnion(finalSelectedPartList),
+                          'selectedParts': finalSelectedPartList,
                         });
                       } catch (e) {
                         print(e);
@@ -190,6 +189,7 @@ class _CreateRoutineState extends State<CreateRoutine> {
                         'routineName': routineName,
                         'exercises': [],
                         'descriptions': [],
+                        'selectedParts': [],
                       });
 
                       Navigator.pop(context);

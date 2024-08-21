@@ -23,7 +23,34 @@ class _SelectRoutineState extends State<SelectRoutine> {
   final user = FirebaseAuth.instance.currentUser;
   List exerciseRoutineList = [];
 
+  int checkBoxCounter = 0;
+
   List selectedPartRoutineList = [];
+
+  void _addMuscleGroupToRoutine(
+      String newMuscleGroup, String newExercise, String newDescription) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      var routineRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('routines')
+          .doc(selectedRoutine);
+
+      DocumentSnapshot docSnapshot = await routineRef.get();
+
+      List<dynamic> currentSelectedParts = docSnapshot['selectedParts'] ?? [];
+
+      currentSelectedParts.add(newMuscleGroup);
+
+      await routineRef.update({
+        'exercises': FieldValue.arrayUnion([newExercise]),
+        'descriptions': FieldValue.arrayUnion([newDescription]),
+        'selectedParts': currentSelectedParts,
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,19 +132,8 @@ class _SelectRoutineState extends State<SelectRoutine> {
                   backgroundColor: Colors.white,
                 ),
                 onPressed: () {
-                  User? user = FirebaseAuth.instance.currentUser;
-
-                  FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(user!.uid)
-                      .collection('routines')
-                      .doc(selectedRoutine)
-                      .set({
-                    'routineName': selectedRoutine,
-                    'exercises': FieldValue.arrayUnion([widget.exerciseName]),
-                    'descriptions': FieldValue.arrayUnion([widget.description]),
-                    'selectedParts': selectedPartRoutineList,
-                  }, SetOptions(merge: true));
+                  _addMuscleGroupToRoutine(widget.selectedPart as String,
+                      widget.exerciseName, widget.description);
 
                   Navigator.pop(context);
                 },
