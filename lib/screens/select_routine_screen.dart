@@ -136,6 +136,14 @@ class _SelectRoutineState extends State<SelectRoutine> {
                       widget.exerciseName, widget.description);
 
                   Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: SizedBox(
+                    height: 50,
+                    child: Center(
+                      child: Text(
+                          '${widget.exerciseName} added to $selectedRoutine'),
+                    ),
+                  )));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(

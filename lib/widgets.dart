@@ -4,7 +4,6 @@ import 'package:fitness_app/screens/description_exercise.dart';
 import 'package:fitness_app/screens/home_screen.dart';
 import 'package:fitness_app/screens/routine_exercises_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'constants.dart';
 import 'package:fitness_app/screens/select_routine_screen.dart';
@@ -116,7 +115,7 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                 children: [
                   SizedBox(
                     height: double.infinity,
-                    width: (MediaQuery.of(context).size.width - 66) / 2,
+                    width: (MediaQuery.of(context).size.width - 67) / 2,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: FutureBuilder(
@@ -126,14 +125,10 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                             .child('${widget.exerciseName}_image.jpg')
                             .getDownloadURL(),
                         builder: (context, snapshot) {
-                          print(widget.selectedPart);
-                          print(widget.exerciseName);
-
-                          print(snapshot);
                           try {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return CircularProgressIndicator(); // Show a loading indicator while waiting
+                              return const CircularProgressIndicator(); // Show a loading indicator while waiting
                             } else if (snapshot.hasError) {
                               return Text(
                                   'Error: ${snapshot.error}'); // Handle errors
@@ -141,7 +136,7 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                               return Image.network(
                                   snapshot.data as String); // Display the image
                             } else {
-                              return Text(
+                              return const Text(
                                   'No data available'); // Handle the case where there's no data
                             }
                           } on Exception catch (e) {
@@ -165,7 +160,6 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                         });
                       },
                       onTap: () {
-                        print(widget.selectedPart);
                         Navigator.push(
                             context,
                             MaterialPageRoute(

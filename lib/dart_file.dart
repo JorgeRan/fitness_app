@@ -10,7 +10,6 @@ void scriptDAta() async {
 
   for (var doc in querySnapshot.docs) {
     await absCollection.doc(doc.id).update({
-
       'selectedPart': 'Upper Body',
     });
   }

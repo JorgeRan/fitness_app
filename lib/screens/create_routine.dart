@@ -193,6 +193,13 @@ class _CreateRoutineState extends State<CreateRoutine> {
                       });
 
                       Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: SizedBox(
+                        height: 50,
+                        child: Center(
+                          child: Text('$routineName Routine Created.'),
+                        ),
+                      )));
                     }
                   },
                   child: Padding(
