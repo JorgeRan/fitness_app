@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitness_app/screens/create_routine.dart';
 import 'package:fitness_app/screens/description_exercise.dart';
 import 'package:fitness_app/screens/home_screen.dart';
 import 'package:fitness_app/screens/routine_exercises_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'constants.dart';
 import 'package:fitness_app/screens/select_routine_screen.dart';
 import 'package:provider/provider.dart';
@@ -65,129 +67,157 @@ class _ExerciseButtonState extends State<ExerciseButton> {
       padding: const EdgeInsets.only(bottom: 35.0),
       child: SizedBox(
         width: 364,
-        height: 180,
-        child: Card(
-          elevation: elevationButtons,
-          color: const Color(0XFF36C2CE),
-          child: Stack(
-            children: [
-              if (widget.showAddButton)
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (context) => SelectRoutine(
-                              exerciseName: widget.exerciseName,
-                              description: widget.exerciseDescription,
-                              selectedPart: widget.selectedPart,
-                            ));
-                  },
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height - 675,
-                          right: MediaQuery.of(context).size.width - 410),
-                      width: (MediaQuery.of(context).size.width - 130) / 2,
-                      child: Row(
-                        children: [
-                          Text(
-                            'Add to routine',
-                            style: kButtonsTextStyle.copyWith(
-                                color: const Color(0xFF4535C1),
-                                fontWeight: FontWeight.w400),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          const Icon(
-                            Icons.add_circle_rounded,
-                            color: Color(0xFF4535C1),
-                            size: 24.22,
-                          ),
-                        ],
-                      ),
+        height: 166,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => DescriptionExercise(
+                          exerciseName: widget.exerciseName,
+                          exerciseDescription: widget.exerciseDescription,
+                          showAddButton: widget.showAddButton,
+                          selectedPart: widget.selectedPart,
+                        )));
+          },
+          child: Card(
+            elevation: elevationButtons,
+            color: const Color(0XFF36C2CE),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 67) / 2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: FutureBuilder(
+                      future: FirebaseStorage.instance
+                          .ref(
+                              '/exercises/${widget.selectedPart}/${widget.exerciseName}/images')
+                          .child('${widget.exerciseName}_image.jpg')
+                          .getDownloadURL(),
+                      builder: (context, snapshot) {
+                        try {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const SpinKitRing(
+                                color:
+                                    kWhite); // Show a loading indicator while waiting
+                          } else if (snapshot.hasError) {
+                            return Text(
+                                'Error: ${snapshot.error}'); // Handle errors
+                          } else if (snapshot.hasData) {
+                            return Image.network(
+                              snapshot.data as String,
+                              fit: BoxFit.cover,
+                            ); // Display the image
+                          } else {
+                            return const Text(
+                                'No data available'); // Handle the case where there's no data
+                          }
+                        } on Exception catch (e) {
+                          print(e);
+                          return Text('$e');
+                        }
+                      },
                     ),
                   ),
                 ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    height: double.infinity,
-                    width: (MediaQuery.of(context).size.width - 67) / 2,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: FutureBuilder(
-                        future: FirebaseStorage.instance
-                            .ref(
-                                '/exercises/${widget.selectedPart}/${widget.exerciseName}/images')
-                            .child('${widget.exerciseName}_image.jpg')
-                            .getDownloadURL(),
-                        builder: (context, snapshot) {
-                          try {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator(); // Show a loading indicator while waiting
-                            } else if (snapshot.hasError) {
-                              return Text(
-                                  'Error: ${snapshot.error}'); // Handle errors
-                            } else if (snapshot.hasData) {
-                              return Image.network(
-                                  snapshot.data as String); // Display the image
-                            } else {
-                              return const Text(
-                                  'No data available'); // Handle the case where there's no data
-                            }
-                          } on Exception catch (e) {
-                            print(e);
-                            return Text('$e');
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(right: 10.0, top: 30, bottom: 20),
-                    child: GestureDetector(
-                      onLongPress: () {
-                        setState(() {
-                          _removeMuscleGroupToRoutine(
-                              widget.selectedPart as String,
+                Padding(
+                  padding: const EdgeInsets.only(right: 10, bottom: 10),
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: (MediaQuery.of(context).size.width - 120) / 2,
+                          child: Center(
+                            child: Text(
+                              textAlign: TextAlign.center,
+                              softWrap: true,
                               widget.exerciseName,
-                              widget.exerciseDescription);
-                        });
-                      },
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => DescriptionExercise(
-                                      exerciseName: widget.exerciseName,
-                                      exerciseDescription:
-                                          widget.exerciseDescription,
-                                      showAddButton: widget.showAddButton,
-                                      selectedPart: widget.selectedPart,
-                                    )));
-                      },
-                      child: SizedBox(
-                        height: double.infinity,
-                        width: (MediaQuery.of(context).size.width - 120) / 2,
-                        child: Center(
-                          child: Text(
-                            textAlign: TextAlign.center,
-                            softWrap: true,
-                            widget.exerciseName,
-                            style: kTitleTextStyle.copyWith(fontSize: 20),
+                              style: kTitleTextStyle.copyWith(fontSize: 20),
+                            ),
                           ),
                         ),
-                      ),
+                        if (widget.showAddButton)
+                          GestureDetector(
+                            onTap: () async {
+                              final routines = await FirebaseFirestore.instance
+                                  .collection('/users/${user?.uid}/routines')
+                                  .get();
+                              if (context.mounted) {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => routines.docs.isEmpty
+                                      ? const CreateRoutine()
+                                      : SelectRoutine(
+                                          exerciseName: widget.exerciseName,
+                                          description:
+                                              widget.exerciseDescription,
+                                          selectedPart: widget.selectedPart,
+                                        ),
+                                );
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Add to routine',
+                                  style: kButtonsTextStyle.copyWith(
+                                      color: const Color(0xFF4535C1),
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                const Icon(
+                                  Icons.add_circle_rounded,
+                                  color: Color(0xFF4535C1),
+                                  size: 24.22,
+                                ),
+                              ],
+                            ),
+                          ),
+                        if (!widget.showAddButton)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _removeMuscleGroupToRoutine(
+                                    widget.selectedPart as String,
+                                    widget.exerciseName,
+                                    widget.exerciseDescription);
+                              });
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Delete',
+                                  style: kButtonsTextStyle.copyWith(
+                                      color: Colors.red[700],
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  Icons.delete,
+                                  color: Colors.red[700],
+                                  size: 24.22,
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -286,43 +316,46 @@ class _RoutineButtonState extends State<RoutineButton> {
           Padding(
             padding: const EdgeInsets.only(
                 left: 28.0, top: 25, bottom: 25, right: 28),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.routineName,
-                  style: kTitleTextStyle.copyWith(
-                      fontWeight: FontWeight.normal, fontSize: 27),
-                ),
-                StreamBuilder(
-                    stream: Provider.of<RoutineData>(context, listen: false)
-                        .countFirebaseExercises(widget.routineName),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else {
-                        final exerciseCount = snapshot.data;
-                        return RichText(
-                          text: TextSpan(
-                              text: '$exerciseCount',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold),
-                              children: const [
-                                TextSpan(
-                                  text: ' exercises',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ]),
-                        );
-                      }
-                    })
-              ],
+            child: Container(
+              color: Colors.transparent,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.routineName,
+                    style: kTitleTextStyle.copyWith(
+                        fontWeight: FontWeight.normal, fontSize: 27),
+                  ),
+                  StreamBuilder(
+                      stream: Provider.of<RoutineData>(context, listen: false)
+                          .countFirebaseExercises(widget.routineName),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else {
+                          final exerciseCount = snapshot.data;
+                          return RichText(
+                            text: TextSpan(
+                                text: '$exerciseCount',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                                children: const [
+                                  TextSpan(
+                                    text: ' exercises',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ]),
+                          );
+                        }
+                      })
+                ],
+              ),
             ),
           ),
           Container(

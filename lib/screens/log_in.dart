@@ -220,6 +220,7 @@ class _LogInState extends State<LogIn> {
                       ),
                       GestureDetector(
                         onTap: () async {
+                          print(_user);
                           showSpinnerEmailPassword(true);
                           if (_user == null) {
                             try {

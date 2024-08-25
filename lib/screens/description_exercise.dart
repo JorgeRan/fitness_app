@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/constants.dart';
+import 'package:fitness_app/screens/create_routine.dart';
 import 'package:fitness_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -32,15 +34,22 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
     return Scaffold(
       floatingActionButton: widget.showAddButton
           ? FloatingActionButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) => SelectRoutine(
-                    exerciseName: widget.exerciseName,
-                    description: widget.exerciseDescription,
-                    selectedPart: widget.selectedPart,
-                  ),
-                );
+              onPressed: () async {
+                final routines = await FirebaseFirestore.instance
+                    .collection('/users/${user?.uid}/routines')
+                    .get();
+                if (context.mounted) {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => routines.docs.isEmpty
+                        ? const CreateRoutine()
+                        : SelectRoutine(
+                            exerciseName: widget.exerciseName,
+                            description: widget.exerciseDescription,
+                            selectedPart: widget.selectedPart,
+                          ),
+                  );
+                }
               },
               backgroundColor: const Color(0xFF4535C1),
               elevation: elevationButtons,
@@ -83,17 +92,7 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const Row(
-                            children: [
-                              Spacer(),
-                              SizedBox(
-                                height: 100,
-                                width: 100,
-                                child: SpinKitRing(color: kWhite),
-                              ),
-                              Spacer(),
-                            ],
-                          );
+                          return const SpinKitRing(color: kWhite);
                         } else if (snapshot.hasData) {
                           _videoPlayerController =
                               VideoPlayerController.networkUrl(
@@ -114,7 +113,9 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                                   child: VideoPlayer(_videoPlayerController!),
                                 );
                               } else {
-                                return const CircularProgressIndicator();
+                                return const SpinKitRing(
+                                  color: kWhite,
+                                );
                               }
                             },
                           );
@@ -137,13 +138,20 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 10.0, left: 10, right: 10, bottom: 10),
-                      child: Text(
-                        textAlign: TextAlign.justify,
-                        widget.exerciseDescription,
-                        style: kButtonsTextStyle.copyWith(
-                            fontWeight: FontWeight.w500, fontSize: 18),
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Description',
+                            style: kTitleTextStyle.copyWith(fontSize: 30),
+                          ),
+                          Text(
+                            widget.exerciseDescription,
+                            style: kButtonsTextStyle.copyWith(
+                                fontWeight: FontWeight.w500, fontSize: 18),
+                          ),
+                        ],
                       ),
                     ),
                   ),

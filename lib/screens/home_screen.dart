@@ -5,6 +5,7 @@ import 'package:body_part_selector/body_part_selector.dart';
 import 'package:fitness_app/constants.dart';
 import 'package:fitness_app/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'exercises_list_screen.dart';
 import 'package:fitness_app/routine_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,7 +55,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              FirebaseAuth.instance.signOut();
+                              try {
+                                FirebaseAuth.instance.signOut();
+                                final GoogleSignIn googleSignIn =
+                                    GoogleSignIn();
+                                googleSignIn.signOut();
+                              } on Exception catch (e) {
+                                print(e);
+                              }
 
                               Navigator.push(
                                   context,
