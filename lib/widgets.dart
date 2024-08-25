@@ -302,7 +302,9 @@ class _RoutineButtonState extends State<RoutineButton> {
             .doc(widget.routineName)
             .delete();
 
-        Provider.of<RoutineData>(context).removeRoutine(widget.routineName);
+        if (context.mounted) {
+          Provider.of<RoutineData>(context).removeRoutine(widget.routineName);
+        }
       },
       onTap: () {
         Navigator.push(
@@ -331,7 +333,8 @@ class _RoutineButtonState extends State<RoutineButton> {
                       stream: Provider.of<RoutineData>(context, listen: false)
                           .countFirebaseExercises(widget.routineName),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return const CircularProgressIndicator();
                         } else {
                           final exerciseCount = snapshot.data;

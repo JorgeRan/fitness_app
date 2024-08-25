@@ -175,7 +175,7 @@ class _CreateRoutineState extends State<CreateRoutine> {
                           'selectedParts': finalSelectedPartList,
                         });
                       } catch (e) {
-                        print(e);
+                        //ignore
                       }
 
                       Navigator.pop(context);

@@ -22,7 +22,6 @@ class RoutineData extends ChangeNotifier {
     try {
       final user = FirebaseAuth.instance.currentUser;
 
-      print('fetching data');
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(user?.uid)
@@ -39,7 +38,7 @@ class RoutineData extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print('Error fetching routines: $e');
+      //ignore
     }
   }
 

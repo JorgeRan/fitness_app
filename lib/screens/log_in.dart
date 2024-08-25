@@ -73,16 +73,17 @@ class _LogInState extends State<LogIn> {
 
       googleEmail = user.email;
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
-
-      print('User signed in: $googleEmail');
+      if (context.mounted) {
+        Navigator.push(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      }
 
       showSpinnerGoogle(false);
     } catch (e) {
-      print('Error signing in with Google: $e');
+//ignore
     }
   }
 
@@ -220,7 +221,6 @@ class _LogInState extends State<LogIn> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          print(_user);
                           showSpinnerEmailPassword(true);
                           if (_user == null) {
                             try {
@@ -235,17 +235,21 @@ class _LogInState extends State<LogIn> {
                                 'email': email,
                               });
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const HomeScreen()),
-                              );
+                              if (context.mounted) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const HomeScreen()),
+                                );
+                              }
                             } catch (signUpError) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text(
-                                        'Failed to sign in or create user: $signUpError')),
-                              );
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'Failed to sign in or create user: $signUpError')),
+                                );
+                              }
                             }
                           } else {
                             try {
@@ -254,16 +258,18 @@ class _LogInState extends State<LogIn> {
                                 password: password,
                               );
 
-                              Provider.of<RoutineData>(context, listen: false)
-                                  .addFirebaseRoutines();
+                              if (context.mounted) {
+                                Provider.of<RoutineData>(context, listen: false)
+                                    .addFirebaseRoutines();
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const HomeScreen()),
-                              );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const HomeScreen()),
+                                );
+                              }
                             } catch (e) {
-                              print(e);
+                              //ignore
                             }
                           }
                           showSpinnerEmailPassword(false);

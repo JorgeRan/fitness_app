@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     GoogleSignIn();
                                 googleSignIn.signOut();
                               } on Exception catch (e) {
-                                print(e);
+                                //ignore
                               }
 
                               Navigator.push(
