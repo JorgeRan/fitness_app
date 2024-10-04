@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Welcome 👋\nto Fitness App!',
+                            'Welcome 👋\nto Pump Up!',
                             textAlign: TextAlign.left,
                             style: kTitleTextStyle.copyWith(
                                 fontSize: 30, fontWeight: FontWeight.bold),

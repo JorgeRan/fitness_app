@@ -102,7 +102,7 @@ class _LogInState extends State<LogIn> {
                 padding: const EdgeInsets.only(top: 10),
                 child: Center(
                   child: Text(
-                    'Fitness App',
+                    'Pump Up',
                     style: GoogleFonts.sourceSerif4(
                         color: kWhite,
                         fontSize: 20,
@@ -326,7 +326,7 @@ class _LogInState extends State<LogIn> {
                             style: kButtonsTextStyle,
                             children: [
                               TextSpan(
-                                text: 'Fitness App Terms & Conditions ',
+                                text: 'Pump Up Terms & Conditions ',
                                 style:
                                     kButtonsTextStyle.copyWith(color: kPurple),
                               ),

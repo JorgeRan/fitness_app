@@ -37,7 +37,7 @@ class _ExercisesListScreenState extends State<ExercisesListScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0, bottom: 15),
                       child: Text(
-                        '${widget.selectedPart} Exercises:',
+                        '${widget.selectedPart} Exercises',
                         style: kTitleTextStyle.copyWith(fontSize: 25),
                       ),
                     ),
