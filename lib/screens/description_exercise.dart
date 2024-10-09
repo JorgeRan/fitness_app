@@ -41,13 +41,18 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                 if (context.mounted) {
                   showModalBottomSheet(
                     context: context,
-                    builder: (context) => routines.docs.isEmpty
+                    isScrollControlled: true,
+                    builder: (context) => SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom), child: routines.docs.isEmpty
                         ? const CreateRoutine()
                         : SelectRoutine(
                             exerciseName: widget.exerciseName,
                             description: widget.exerciseDescription,
                             selectedPart: widget.selectedPart,
                           ),
+                      ),
+                    )
                   );
                 }
               },
@@ -63,7 +68,8 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
               ),
             )
           : null,
-      body: SafeArea(
+      body: Padding(
+        padding: const EdgeInsets.only(top: 50),
         child: Stack(
           children: [
             const Positioned(
@@ -98,7 +104,7 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                               VideoPlayerController.networkUrl(
                             Uri.parse(snapshot.data as String),
                           );
-
+        
                           return FutureBuilder(
                             future: _videoPlayerController!.initialize(),
                             builder: (context, videoSnapshot) {
@@ -106,7 +112,7 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
                                   ConnectionState.done) {
                                 _videoPlayerController!.play();
                                 _videoPlayerController!.setLooping(true);
-
+        
                                 return AspectRatio(
                                   aspectRatio:
                                       _videoPlayerController!.value.aspectRatio,
