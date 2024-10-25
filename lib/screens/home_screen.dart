@@ -1,3 +1,4 @@
+import 'package:fitness_app/authentication.dart';
 import 'package:fitness_app/screens/log_in.dart';
 import 'package:fitness_app/screens/routines_screen.dart';
 import 'package:flutter/material.dart';
@@ -5,10 +6,9 @@ import 'package:body_part_selector/body_part_selector.dart';
 import 'package:fitness_app/constants.dart';
 import 'package:fitness_app/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'exercises_list_screen.dart';
 import 'package:fitness_app/routine_data.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 String selectedSide = "Front";
 
@@ -37,68 +37,71 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             child: Stack(
               children: [
-                Container(
-                  height: 205,
-                  color: const Color(0xFF4535C1),
-                  padding: const EdgeInsets.only(top: 40, left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Expanded(
+                  child: Container(
+                    height: 205,
+                    color: const Color(0xFF4535C1),
+                    padding:
+                        const EdgeInsets.only(top: 40, left: 20, right: 20),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Welcome 👋\nto Pump Up!',
-                            textAlign: TextAlign.left,
-                            style: kTitleTextStyle.copyWith(
-                                fontSize: 30, fontWeight: FontWeight.bold),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              try {
-                                FirebaseAuth.instance.signOut();
-                                final GoogleSignIn googleSignIn =
-                                    GoogleSignIn();
-                                googleSignIn.signOut();
-                              } on Exception catch (e) {
-                                //ignore
-                              }
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Welcome 👋\nto Pump Up!',
+                                textAlign: TextAlign.left,
+                                style: kTitleTextStyle.copyWith(
+                                    fontSize: 30, fontWeight: FontWeight.bold),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  try {
+                                    context.read<AuthenticationService>().signOut(context);
+                                  } catch (e) {
+                                    Center(child: Text('$e'));
+                                  }
 
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const LogIn()));
-                            },
-                            child: const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 30,
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  left: 8,
-                                  right: 15,
-                                  top: 2,
-                                ),
-                                child: Icon(
-                                  FontAwesomeIcons.dumbbell,
-                                  color: Color(0xFF4535C1),
-                                  size: 30,
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const LogIn()));
+                                },
+                                child: const CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: 30,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                      left: 8,
+                                      right: 15,
+                                      top: 2,
+                                    ),
+                                    child: Icon(
+                                      FontAwesomeIcons.dumbbell,
+                                      color: Color(0xFF4535C1),
+                                      size: 30,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Select a muscle to get started',
+                            textAlign: TextAlign.left,
+                            style: kTitleTextStyle.copyWith(
+                              fontSize: 20,
+                            ),
+                          )
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Select a muscle to get started',
-                        textAlign: TextAlign.left,
-                        style: kTitleTextStyle.copyWith(
-                          fontSize: 20,
-                        ),
-                      )
-                    ],
+                    ),
                   ),
                 ),
                 Positioned(

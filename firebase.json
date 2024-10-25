@@ -1,9 +1,1 @@
-{
-  "database": {
-    "rules": "database.rules.json"
-  },
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  }
-}
+{"database":{"rules":"database.rules.json"},"firestore":{"rules":"firestore.rules","indexes":"firestore.indexes.json"},"flutter":{"platforms":{"android":{"default":{"projectId":"fitness-app-d3545","appId":"1:983797582372:android:6cce98f82f20c5e66326b1","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"fitness-app-d3545","appId":"1:983797582372:ios:c44db7631b88d7666326b1","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"fitness-app-d3545","configurations":{"android":"1:983797582372:android:6cce98f82f20c5e66326b1","ios":"1:983797582372:ios:c44db7631b88d7666326b1"}}}}}}

@@ -69,6 +69,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'fitness-app-d3545.appspot.com',
     androidClientId: '983797582372-qi4uf3vin2qc81s1dbj0kai9fjvtict8.apps.googleusercontent.com',
     iosClientId: '983797582372-hpv7s6fiilof9lhnqrml2mvcr18du6m9.apps.googleusercontent.com',
-    iosBundleId: 'com.example.fitnessApp',
+    iosBundleId: 'com.jorgerangel.fitness_app',
   );
 }

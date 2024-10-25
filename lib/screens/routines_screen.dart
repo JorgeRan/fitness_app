@@ -15,12 +15,13 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(
-                  left: 28, right: 35, top: 40, bottom: 55),
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(
+                left: 28, right: 35, top: 40, bottom: 55),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -32,44 +33,47 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                 ],
               ),
             ),
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                  color: Color(0xFF4535C1),
+          ),
+          Expanded(
+            child: Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    const Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 82.0),
-                        child: RoutineList(),
-                      ),
+                color: Color(0xFF4535C1),
+              ),
+              width: double.infinity,
+              child: Column(
+                children: [
+                  const Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 82.0),
+                      child: RoutineList(),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(22.0),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: GestureDetector(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) => SingleChildScrollView(
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      bottom: MediaQuery.of(context)
-                                          .viewInsets
-                                          .bottom),
-                                  child: const CreateRoutine(),
-                                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(22.0),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) => SingleChildScrollView(
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom),
+                                child: const CreateRoutine(),
                               ),
-                            );
-                          },
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
                           child: Row(
                             children: [
                               const Icon(
@@ -104,12 +108,12 @@ class _RoutinesScreenState extends State<RoutinesScreen> {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

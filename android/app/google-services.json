@@ -8,56 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:983797582372:android:43b71d43db18dab36326b1",
-        "android_client_info": {
-          "package_name": "com.example.fitness_app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "983797582372-sdsef09ke67v8leu246s5qgtm3jvet7a.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.fitness_app",
-            "certificate_hash": "b562860d3ec406e06d7d48f08a8b097144695b7b"
-          }
-        },
-        {
-          "client_id": "983797582372-3ggh9e2lp5ol8m3eb8frmnapa66qj0p7.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyADUUpBtWqUVBboA6BJqavsT8c0AFRa5c0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "983797582372-3ggh9e2lp5ol8m3eb8frmnapa66qj0p7.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "983797582372-voqi0c1q24ta7pb88tbiehp8mafve67i.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.jorgeran.fitnessApp"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:983797582372:android:6cce98f82f20c5e66326b1",
         "android_client_info": {
           "package_name": "com.jorgerangel.fitness_app"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "983797582372-g2qafsmf9nf9m4a3p5v53b682sitt1f0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jorgerangel.fitness_app",
+            "certificate_hash": "6ea84de147377972c9717a7d550bc52fceeca80b"
+          }
+        },
         {
           "client_id": "983797582372-qi4uf3vin2qc81s1dbj0kai9fjvtict8.apps.googleusercontent.com",
           "client_type": 1,
@@ -67,7 +31,7 @@
           }
         },
         {
-          "client_id": "983797582372-3ggh9e2lp5ol8m3eb8frmnapa66qj0p7.apps.googleusercontent.com",
+          "client_id": "983797582372-dm8c9u92qoeoft55prm9odifqeeovmic.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -84,10 +48,10 @@
               "client_type": 3
             },
             {
-              "client_id": "983797582372-voqi0c1q24ta7pb88tbiehp8mafve67i.apps.googleusercontent.com",
+              "client_id": "983797582372-hpv7s6fiilof9lhnqrml2mvcr18du6m9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.jorgeran.fitnessApp"
+                "bundle_id": "com.example.fitnessApp"
               }
             }
           ]

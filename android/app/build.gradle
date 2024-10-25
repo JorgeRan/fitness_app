@@ -8,8 +8,9 @@ plugins {
 
 dependencies {
   // Import the Firebase BoM
-  implementation platform('com.google.firebase:firebase-bom:33.1.2')
-  implementation 'com.google.firebase:firebase-auth:21.0.1'
+    implementation platform('com.google.firebase:firebase-bom:33.5.0')
+    implementation 'com.google.firebase:firebase-auth:21.0.1'
+    
 
 
   // TODO: Add the dependencies for Firebase products you want to use
@@ -42,7 +43,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.jorgerangel.fitness_app"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "25.1.8937393"
     signingConfigs {
         release {
             keyAlias = keystoreProperties['keyAlias']
@@ -51,12 +52,27 @@ android {
             storePassword = keystoreProperties['storePassword']
         }
     }
+    tasks.withType(JavaCompile) {
+        options.compilerArgs += ["-Xlint:-options"]
+    
+    tasks.withType(JavaCompile) {
+        options.warnings = false
+        }   
+    }
+    tasks.withType(JavaCompile) {
+        options.compilerArgs.remove('-Werror')
+    }
+
+
     aaptOptions {  
         cruncherEnabled = false
-}
+    }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+     kotlinOptions {
+        jvmTarget = "21" 
     }
 
     defaultConfig {
@@ -69,6 +85,7 @@ android {
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
         minSdkVersion 23
+        targetSdkVersion 34 
     }
 
     buildTypes {

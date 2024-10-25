@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fitness_app/routine_data.dart';
 import 'package:fitness_app/screens/home_screen.dart';
 import 'package:fitness_app/widgets.dart';
 import 'package:fitness_app/constants.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fitness_app/authentication.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -25,7 +27,7 @@ class _LogInState extends State<LogIn> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   bool isLoading = false;
   bool googleLoading = false;
-  late String? googleEmail;
+  late String? googleEmail = '';
   bool isPressed = false;
 
   showSpinnerEmailPassword(bool value) {
@@ -47,10 +49,13 @@ class _LogInState extends State<LogIn> {
   Future<void> signInWithGoogle() async {
     try {
       showSpinnerGoogle(true);
+      await googleSignIn.signOut();
+
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser!.authentication;
+
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -73,9 +78,8 @@ class _LogInState extends State<LogIn> {
 
       googleEmail = user.email;
 
-      if (context.mounted) {
+      if (mounted) {
         Navigator.push(
-          // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(builder: (_) => const HomeScreen()),
         );
@@ -83,11 +87,13 @@ class _LogInState extends State<LogIn> {
 
       showSpinnerGoogle(false);
     } catch (e) {
-//ignore
+      showSpinnerGoogle(false);
     }
   }
 
-  Future<void> signInWithApple(BuildContext context) async {}
+  Future<void> signInWithApple(BuildContext context) async {
+    print('Apple sign in');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,56 +228,15 @@ class _LogInState extends State<LogIn> {
                       GestureDetector(
                         onTap: () async {
                           showSpinnerEmailPassword(true);
-                          if (_user == null) {
-                            try {
-                              await auth.createUserWithEmailAndPassword(
-                                email: email,
-                                password: password,
-                              );
-                              CollectionReference usersCollection =
-                                  FirebaseFirestore.instance
-                                      .collection('users');
-                              await usersCollection.doc(_user?.uid).set({
-                                'email': email,
-                              });
 
-                              if (context.mounted) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const HomeScreen()),
-                                );
-                              }
-                            } catch (signUpError) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          'Failed to sign in or create user: $signUpError')),
-                                );
-                              }
-                            }
-                          } else {
-                            try {
-                              await auth.signInWithEmailAndPassword(
-                                email: email,
-                                password: password,
-                              );
-
-                              if (context.mounted) {
-                                Provider.of<RoutineData>(context, listen: false)
-                                    .addFirebaseRoutines();
-
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const HomeScreen()),
-                                );
-                              }
-                            } catch (e) {
-                              //ignore
-                            }
+                          try {
+                            context
+                                .read<AuthenticationService>()
+                                .emailPasswordSignIn(context, email, password);
+                          } on Exception catch (e) {
+                            Center(child: Text('$e'));
                           }
+
                           showSpinnerEmailPassword(false);
                         },
                         child: isLoading
@@ -312,8 +277,23 @@ class _LogInState extends State<LogIn> {
                                   appLogin: 'google',
                                   color: kWhite,
                                   scale: 0.6,
-                                  signInFunction: () => signInWithGoogle(),
+                                  signInFunction: () => context
+                                      .read<AuthenticationService>()
+                                      .signInWithGoogle(context),
                                 ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          if (Platform.isIOS)
+                            googleLoading
+                                ? const SpinKitRing(color: kWhite)
+                                : GoogleAppleButton(
+                                    appLogin: 'apple',
+                                    color: Colors.black,
+                                    scale: 0.6,
+                                    signInFunction: () =>
+                                        signInWithApple(context),
+                                  ),
                         ],
                       ),
                       const Spacer(),
