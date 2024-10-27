@@ -37,72 +37,77 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             child: Stack(
               children: [
-                Expanded(
-                  child: Container(
-                    height: 205,
-                    color: const Color(0xFF4535C1),
-                    padding:
-                        const EdgeInsets.only(top: 40, left: 20, right: 20),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 205,
+                        color: const Color(0xFF4535C1),
+                        padding:
+                            const EdgeInsets.only(top: 40, left: 20, right: 20),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Welcome 👋\nto Pump Up!',
-                                textAlign: TextAlign.left,
-                                style: kTitleTextStyle.copyWith(
-                                    fontSize: 30, fontWeight: FontWeight.bold),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  try {
-                                    context.read<AuthenticationService>().signOut(context);
-                                  } catch (e) {
-                                    Center(child: Text('$e'));
-                                  }
-
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const LogIn()));
-                                },
-                                child: const CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 30,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      left: 8,
-                                      right: 15,
-                                      top: 2,
-                                    ),
-                                    child: Icon(
-                                      FontAwesomeIcons.dumbbell,
-                                      color: Color(0xFF4535C1),
-                                      size: 30,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Welcome 👋\nto Pump Up!',
+                                    textAlign: TextAlign.left,
+                                    style: kTitleTextStyle.copyWith(
+                                        fontSize: 30, fontWeight: FontWeight.bold),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      try {
+                                        context.read<AuthenticationService>().signOut(context);
+                                      } catch (e) {
+                                        Center(child: Text('$e'));
+                                      }
+                      
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => const LogIn()));
+                                    },
+                                    child: const CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 30,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 8,
+                                          right: 15,
+                                          top: 2,
+                                        ),
+                                        child: Icon(
+                                          FontAwesomeIcons.dumbbell,
+                                          color: Color(0xFF4535C1),
+                                          size: 30,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Select a muscle to get started',
+                                textAlign: TextAlign.left,
+                                style: kTitleTextStyle.copyWith(
+                                  fontSize: 20,
+                                ),
+                              )
                             ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            'Select a muscle to get started',
-                            textAlign: TextAlign.left,
-                            style: kTitleTextStyle.copyWith(
-                              fontSize: 20,
-                            ),
-                          )
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
                 Positioned(
                   bottom: 0,

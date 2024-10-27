@@ -73,18 +73,18 @@ class _DescriptionExerciseState extends State<DescriptionExercise> {
         child: Stack(
           children: [
             const Positioned(
-              top: 16,
+              top: 5,
               left: 10,
               child: PopButton(),
             ),
             Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 20),
                   child: Text(
                     textAlign: TextAlign.center,
                     widget.exerciseName,
-                    style: kTitleTextStyle.copyWith(fontSize: 25),
+                    style: kTitleTextStyle.copyWith(fontSize: 20),
                   ),
                 ),
                 SizedBox(

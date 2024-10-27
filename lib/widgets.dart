@@ -66,8 +66,8 @@ class _ExerciseButtonState extends State<ExerciseButton> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: SizedBox(
-        width: 364,
-        height: 166,
+        width: 360,
+        height: 150,
         child: GestureDetector(
           onTap: () {
             Navigator.push(
@@ -102,21 +102,21 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                               ConnectionState.waiting) {
                             return const SpinKitRing(
                                 color:
-                                    kWhite); // Show a loading indicator while waiting
+                                    kWhite); 
                           } else if (snapshot.hasError) {
                             return Text(
-                                'Error: ${snapshot.error}'); // Handle errors
+                                'Error: ${snapshot.error}'); 
                           } else if (snapshot.hasData) {
                             return Image.network(
                               snapshot.data as String,
                               fit: BoxFit.cover,
-                            ); // Display the image
+                            );
                           } else {
                             return const Text(
-                                'No data available'); // Handle the case where there's no data
+                                'No data available'); 
                           }
                         } on Exception catch (e) {
-                          print(e);
+                          Center(child: Text('$e'),);
                           return Text('$e');
                         }
                       },
@@ -140,7 +140,7 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                               textAlign: TextAlign.center,
                               softWrap: true,
                               widget.exerciseName,
-                              style: kTitleTextStyle.copyWith(fontSize: 20),
+                              style: kTitleTextStyle.copyWith(fontSize: 15),
                             ),
                           ),
                         ),
@@ -199,7 +199,8 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                                   'Delete',
                                   style: kButtonsTextStyle.copyWith(
                                       color: Colors.red[700],
-                                      fontWeight: FontWeight.w400),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15),
                                 ),
                                 const SizedBox(
                                   width: 5,
@@ -207,7 +208,7 @@ class _ExerciseButtonState extends State<ExerciseButton> {
                                 Icon(
                                   Icons.delete,
                                   color: Colors.red[700],
-                                  size: 24.22,
+                                  size: 20,
                                 ),
                               ],
                             ),
@@ -239,7 +240,7 @@ class BodySideButton extends StatelessWidget {
       child: Card(
         elevation: elevationButtons,
         child: Container(
-          width: 181,
+          width: 160,
           height: 28,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
