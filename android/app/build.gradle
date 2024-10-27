@@ -1,21 +1,13 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
     id 'com.google.gms.google-services'
 }
 
 dependencies {
-  // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:33.5.0')
     implementation 'com.google.firebase:firebase-auth:21.0.1'
-    
-
-
-  // TODO: Add the dependencies for Firebase products you want to use
-  // When using the BoM, don't specify versions in Firebase dependencies
-  // https://firebase.google.com/docs/android/setup#available-libraries
 }
 
 def localProperties = new Properties()
@@ -26,24 +18,32 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
-if (flutterVersionCode == null) {
-    flutterVersionCode = "1"
-}
+def flutterVersionCode = localProperties.getProperty("flutter.versionCode", "1")
+def flutterVersionName = localProperties.getProperty("flutter.versionName", "1.0")
 
-def flutterVersionName = localProperties.getProperty("flutter.versionName")
-if (flutterVersionName == null) {
-    flutterVersionName = "1.0"
-}
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
+
+// Check if the `key.properties` file exists and load it
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    println "Keystore file loaded successfully."
+} else {
+    println "Warning: key.properties file not found!"
 }
+
+// Print debug information to verify property loading
+println "Store File Path: ${keystoreProperties['storeFile']}"
+println "Key Alias: ${keystoreProperties['keyAlias']}"
+println "Store Password: ${keystoreProperties['storePassword']}"
+println "Key Password: ${keystoreProperties['keyPassword']}"
+
+
 android {
     namespace = "com.jorgerangel.fitness_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "25.1.8937393"
+
     signingConfigs {
         release {
             keyAlias = keystoreProperties['keyAlias']
@@ -52,48 +52,40 @@ android {
             storePassword = keystoreProperties['storePassword']
         }
     }
+
     tasks.withType(JavaCompile) {
         options.compilerArgs += ["-Xlint:-options"]
-    
-    tasks.withType(JavaCompile) {
         options.warnings = false
-        }   
-    }
-    tasks.withType(JavaCompile) {
         options.compilerArgs.remove('-Werror')
     }
 
-
-    aaptOptions {  
+    aaptOptions {
         cruncherEnabled = false
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-     kotlinOptions {
-        jvmTarget = "21" 
+
+    kotlinOptions {
+        jvmTarget = "21"
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.jorgerangel.fitness_app"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdk = flutter.minSdkVersion
+        minSdkVersion 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
-        minSdkVersion 23
-        targetSdkVersion 34 
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            minifyEnabled true
+            shrinkResources true
+            signingConfig = signingConfigs.debug
             signingConfig = signingConfigs.release
-           
         }
     }
 }
