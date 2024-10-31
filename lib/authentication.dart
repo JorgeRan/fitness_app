@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/screens/log_in.dart';
@@ -127,6 +129,7 @@ class AuthenticationService {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to sign in with Google: $error')),
         );
+        print('$e');
       }
     }
   }
