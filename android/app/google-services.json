@@ -15,19 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "983797582372-g2qafsmf9nf9m4a3p5v53b682sitt1f0.apps.googleusercontent.com",
+          "client_id": "983797582372-1hv6a4iisv4l1nrlhlu749gqh43oeima.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.jorgerangel.fitness_app",
-            "certificate_hash": "6ea84de147377972c9717a7d550bc52fceeca80b"
-          }
-        },
-        {
-          "client_id": "983797582372-qi4uf3vin2qc81s1dbj0kai9fjvtict8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.jorgerangel.fitness_app",
-            "certificate_hash": "b562860d3ec406e06d7d48f08a8b097144695b7b"
+            "certificate_hash": "0e3b74b643a2fc3d686bb45605f394a9c2e667ab"
           }
         },
         {
