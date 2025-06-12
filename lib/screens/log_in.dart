@@ -1,7 +1,4 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fitness_app/screens/home_screen.dart';
 import 'package:fitness_app/widgets.dart';
 import 'package:fitness_app/constants.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +20,10 @@ class _LogInState extends State<LogIn> {
   late String email = '';
   late String password = '';
   FirebaseAuth auth = FirebaseAuth.instance;
-  final User? _user = FirebaseAuth.instance.currentUser;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   bool isLoading = false;
   bool googleLoading = false;
+  bool appleLoading = false;
   late String? googleEmail = '';
   bool isPressed = false;
 
@@ -42,57 +39,14 @@ class _LogInState extends State<LogIn> {
     });
   }
 
+  showSpinnerApple(bool value) {
+    setState(() {
+      appleLoading = value;
+    });
+  }
+
   googlePressed(bool value) {
     isPressed = value;
-  }
-
-  Future<void> signInWithGoogle() async {
-    try {
-      showSpinnerGoogle(true);
-      await googleSignIn.signOut();
-
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser!.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      UserCredential userCredential =
-          await auth.signInWithCredential(credential);
-      User? user = userCredential.user;
-
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user!.uid)
-          .get();
-
-      if (!userDoc.exists) {
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'email': user.email,
-        });
-      }
-
-      googleEmail = user.email;
-
-      if (mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-        );
-      }
-
-      showSpinnerGoogle(false);
-    } catch (e) {
-      showSpinnerGoogle(false);
-    }
-  }
-
-  Future<void> signInWithApple(BuildContext context) async {
-    print('Apple sign in');
   }
 
   @override
@@ -227,17 +181,19 @@ class _LogInState extends State<LogIn> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          showSpinnerEmailPassword(true);
-
                           try {
+                            showSpinnerEmailPassword(true);
                             context
                                 .read<AuthenticationService>()
                                 .emailPasswordSignIn(context, email, password);
-                          } on Exception catch (e) {
-                            Center(child: Text('$e'));
-                          }
+                            print('spinner false');
 
-                          showSpinnerEmailPassword(false);
+                            showSpinnerEmailPassword(false);
+                          } on Exception catch (e) {
+                            Center(
+                              child: Text('$e'),
+                            );
+                          }
                         },
                         child: isLoading
                             ? const SpinKitRing(color: kWhite)
@@ -277,22 +233,40 @@ class _LogInState extends State<LogIn> {
                                   appLogin: 'google',
                                   color: kWhite,
                                   scale: 0.6,
-                                  signInFunction: () => context
-                                      .read<AuthenticationService>()
-                                      .signInWithGoogle(context),
+                                  signInFunction: () async {
+                                    showSpinnerGoogle(true); 
+                                    final success = await context
+                                        .read<AuthenticationService>()
+                                        .signInWithGoogle(context);
+                                    showSpinnerGoogle(false);
+
+                                    if (!success) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              'Google sign-in was cancelled or failed.'),
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
                           const SizedBox(
                             width: 20,
                           ),
                           if (Platform.isIOS)
-                            googleLoading
+                            appleLoading
                                 ? const SpinKitRing(color: kWhite)
                                 : GoogleAppleButton(
                                     appLogin: 'apple',
                                     color: Colors.black,
                                     scale: 0.6,
-                                    signInFunction: () =>
-                                        signInWithApple(context),
+                                    signInFunction: () {
+                                      showSpinnerApple(true);
+                                      context
+                                          .read<AuthenticationService>()
+                                          .signInWithApple(context);
+                                    },
                                   ),
                         ],
                       ),

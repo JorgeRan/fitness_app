@@ -14,13 +14,14 @@ class CreateRoutine extends StatefulWidget {
 }
 
 class _CreateRoutineState extends State<CreateRoutine> {
-  late String routineName;
+  late String routineName = '';
   late bool showMuscleGroup = false;
   late List finalExercisesList = [];
   late List finalDescriptionsList = [];
   late List finalSelectedPartList = [];
   late List addedExercises = [];
   bool isChecked = false;
+  String? errorMessage;
 
   void updateShowMuscleGroup(bool value) {
     setState(() {
@@ -58,7 +59,10 @@ class _CreateRoutineState extends State<CreateRoutine> {
               TextField(
                 style: const TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
-                decoration: const InputDecoration(
+                onChanged: (value) {
+                  routineName = value;
+                },
+                decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
                     ),
@@ -67,10 +71,16 @@ class _CreateRoutineState extends State<CreateRoutine> {
                     hintStyle: TextStyle(
                       color: Color.fromARGB(126, 255, 255, 255),
                     )),
-                onChanged: (value) {
-                  routineName = value;
-                },
               ),
+              (errorMessage != null)
+                  ? Container(
+                      color: kCyan,
+                      child: Text(
+                        errorMessage!,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    )
+                  : Container(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: RoutineRadioButton(
@@ -153,6 +163,13 @@ class _CreateRoutineState extends State<CreateRoutine> {
                     backgroundColor: Colors.white,
                   ),
                   onPressed: () {
+                    if (routineName.isEmpty) {
+                      errorMessage = 'Routine name cannot be empty';
+                      setState(() {});
+                    } else {
+                      errorMessage = null;
+                    }
+
                     final routineData =
                         Provider.of<RoutineData>(context, listen: false);
 
