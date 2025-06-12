@@ -1,17 +1,48 @@
-# fitness_app
+# 💪 Pump Up! – Personalized Workout Planner
 
-A new Flutter project.
+**Pump Up!** is a mobile fitness app designed to help users build and manage custom workout routines based on selected muscle groups. Built with Flutter and Firebase, it offers a smooth user experience for planning, tracking, and learning exercises.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🔥 Features
 
-A few resources to get you started if this is your first Flutter project:
+- 🎯 Select and target specific **muscle groups**
+- 📋 Create and manage custom **workout routines**
+- 🏋️ Add exercises with **images** and **video explanations**
+- ☁️ Firebase backend for secure data and media storage
+- 💡 Beginner-friendly architecture using `ChangeNotifierProvider`
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-"# fitness_app" 
+## 🧱 Tech Stack
+
+| Layer         | Tech Used               |
+|---------------|--------------------------|
+| Frontend      | Flutter                  |
+| State Mgmt    | `ChangeNotifierProvider` |
+| Backend       | Firebase Firestore       |
+| Media Storage | Firebase Storage         |
+
+---
+
+## 📲 App Flow
+
+1. Select muscle groups to focus on.
+2. Create a routine using selected muscles.
+3. Add exercises with optional media support.
+4. Save and track progress.
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# Clone the repo
+git clone https://github.com/your-username/pump-up.git
+cd pump-up
+
+# Install dependencies
+flutter pub get
+
+# Run the app
+flutter run
